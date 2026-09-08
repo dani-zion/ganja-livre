@@ -75,7 +75,6 @@ func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInp
 	}, nil
 }
 
-// Login is the resolver for the login field.
 func (r *mutationResolver) Login(ctx context.Context, input model.LoginInput) (*model.AuthPayload, error) {
 	input.Email = strings.TrimSpace(input.Email)
 
@@ -115,9 +114,47 @@ func (r *mutationResolver) Login(ctx context.Context, input model.LoginInput) (*
 	}, nil
 }
 
-// RefreshToken is the resolver for the refreshToken field.
 func (r *mutationResolver) RefreshToken(ctx context.Context, token string) (*model.AuthPayload, error) {
-	panic(fmt.Errorf("not implemented: RefreshToken - refreshToken"))
+	claims, err := r.jwtSvc.ValidateRefreshToken(token)
+	if err != nil {
+		return nil, errInvalidToken
+	}
+
+	uid, err := primitive.ObjectIDFromHex(claims.UserID)
+	if err != nil {
+		return nil, errInvalidToken
+	}
+
+	var user dbmodel.User
+	err = r.cols.Users.FindOne(ctx, bson.M{"_id": uid}).Decode(&user)
+	if err == mongo.ErrNoDocuments {
+		return nil, errNotFound
+	}
+	if err != nil {
+		return nil, errInternal
+	}
+
+	if !user.IsActive {
+		return nil, errInvalidToken
+	}
+
+	tokens, err := r.jwtSvc.IssueTokenPair(user.ID.Hex(), user.Email, model.UserRole(user.Role))
+	if err != nil {
+		return nil, errInternal
+	}
+
+	return &model.AuthPayload{
+		AccessToken:  tokens.AccessToken,
+		RefreshToken: tokens.RefreshToken,
+		User: &model.User{
+			ID:        user.ID.Hex(),
+			Email:     user.Email,
+			Name:      user.Name,
+			Role:      model.UserRole(user.Role),
+			CreatedAt: user.CreatedAt,
+			UpdatedAt: user.UpdatedAt,
+		},
+	}, nil
 }
 
 // CreateProduct is the resolver for the createProduct field.
