@@ -234,7 +234,7 @@ mutation {
 
 ---
 
-## Security Notes
+<!-- ## Security Notes
 
 - **Passwords** hashed with `bcrypt` (cost 12). Timing-safe login prevents user enumeration.
 - **JWT**: Short-lived access tokens (15 min) + long-lived refresh tokens (7 days) with separate secrets.
@@ -268,4 +268,4 @@ The stack is cloud-ready out of the box:
 - **MongoDB** → swap `MONGODB_URI` for a MongoDB Atlas connection string (TLS included)
 - **Temporal** → use [Temporal Cloud](https://temporal.io/cloud) and update `TEMPORAL_HOST_PORT` + `TEMPORAL_NAMESPACE`
 - **Secrets** → inject via AWS Secrets Manager, GCP Secret Manager, or Kubernetes Secrets
-- **Rate limiter** → swap the in-memory token bucket for `go-redis/redis_rate` when running multiple replicas
+- **Rate limiter** → swap the in-memory token bucket for `go-redis/redis_rate` when running multiple replicas -->

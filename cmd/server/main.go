@@ -87,7 +87,7 @@ func main() {
 	r := chi.NewRouter()
 
 	r.Use(chimw.RequestID)
-	r.Use(chimw.RealIP)
+	r.Use(chimw.ClientIPFromXFFTrustedProxies(1))
 	r.Use(chimw.Recoverer)
 	r.Use(chimw.Timeout(cfg.Server.ReadTimeout))
 	r.Use(appmw.SecurityHeaders())
