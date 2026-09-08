@@ -356,3 +356,122 @@ func TestLogin_TokensAreValid(t *testing.T) {
 		assert.Equal(t, payload.User.Email, refreshClaims.Email)
 	})
 }
+
+// ─── RefreshToken tests ─────────────────────────────────────────────────────
+
+func doRefreshToken(r *Resolver, token string) (*model.AuthPayload, error) {
+	return (&mutationResolver{r}).RefreshToken(context.Background(), token)
+}
+
+func TestRefreshToken_Success(t *testing.T) {
+	mt := mtest.New(t, mtest.NewOptions().ClientType(mtest.Mock))
+	mt.Run("success", func(mt *mtest.T) {
+		r := registerResolver(mt)
+		hash, _ := bcrypt.GenerateFromPassword([]byte("mypassword"), bcrypt.DefaultCost)
+		uid := primitive.NewObjectID()
+		doc := bson.D{
+			{Key: "_id", Value: uid},
+			{Key: "email", Value: "refresh@example.com"},
+			{Key: "password_hash", Value: string(hash)},
+			{Key: "name", Value: "Refresh User"},
+			{Key: "role", Value: "CUSTOMER"},
+			{Key: "is_active", Value: true},
+			{Key: "created_at", Value: time.Now().UTC()},
+			{Key: "updated_at", Value: time.Now().UTC()},
+		}
+
+		tokens, err := r.jwtSvc.IssueTokenPair(uid.Hex(), "refresh@example.com", model.UserRoleCustomer)
+		require.NoError(t, err)
+
+		mt.AddMockResponses(mtest.CreateCursorResponse(1, "ganja-livre.users", mtest.FirstBatch, doc))
+
+		payload, err := doRefreshToken(r, tokens.RefreshToken)
+		require.NoError(t, err)
+		assert.NotEmpty(t, payload.AccessToken)
+		assert.NotEmpty(t, payload.RefreshToken)
+		assert.Equal(t, "refresh@example.com", payload.User.Email)
+		assert.Equal(t, "Refresh User", payload.User.Name)
+		assert.Equal(t, model.UserRoleCustomer, payload.User.Role)
+
+		newAccessClaims, err := r.jwtSvc.ValidateAccessToken(payload.AccessToken)
+		require.NoError(t, err)
+		assert.Equal(t, "refresh@example.com", newAccessClaims.Email)
+	})
+}
+
+func TestRefreshToken_InvalidToken(t *testing.T) {
+	mt := mtest.New(t, mtest.NewOptions().ClientType(mtest.Mock))
+	mt.Run("invalid_token", func(mt *mtest.T) {
+		r := registerResolver(mt)
+
+		_, err := doRefreshToken(r, "not-a-valid-jwt")
+		require.Error(t, err)
+		assert.Equal(t, errInvalidToken, err)
+	})
+}
+
+func TestRefreshToken_ExpiredToken(t *testing.T) {
+	mt := mtest.New(t, mtest.NewOptions().ClientType(mtest.Mock))
+	mt.Run("expired_token", func(mt *mtest.T) {
+		r := registerResolver(mt)
+		uid := primitive.NewObjectID()
+
+		shortLivedCfg := config.JWTConfig{
+			AccessSecret:       testJWTConfig.AccessSecret,
+			RefreshSecret:      testJWTConfig.RefreshSecret,
+			AccessTokenExpiry:  15 * time.Minute,
+			RefreshTokenExpiry: -1 * time.Hour,
+		}
+		svc := auth.NewService(shortLivedCfg)
+		tokens, err := svc.IssueTokenPair(uid.Hex(), "expired@example.com", model.UserRoleCustomer)
+		require.NoError(t, err)
+
+		_, err = doRefreshToken(r, tokens.RefreshToken)
+		require.Error(t, err)
+		assert.Equal(t, errInvalidToken, err)
+	})
+}
+
+func TestRefreshToken_UserNotFound(t *testing.T) {
+	mt := mtest.New(t, mtest.NewOptions().ClientType(mtest.Mock))
+	mt.Run("user_not_found", func(mt *mtest.T) {
+		r := registerResolver(mt)
+		uid := primitive.NewObjectID()
+
+		tokens, err := r.jwtSvc.IssueTokenPair(uid.Hex(), "ghost@example.com", model.UserRoleCustomer)
+		require.NoError(t, err)
+
+		mt.AddMockResponses(mtest.CreateCursorResponse(0, "ganja-livre.users", mtest.FirstBatch))
+
+		_, err = doRefreshToken(r, tokens.RefreshToken)
+		require.Error(t, err)
+		assert.Equal(t, errNotFound, err)
+	})
+}
+
+func TestRefreshToken_UserInactive(t *testing.T) {
+	mt := mtest.New(t, mtest.NewOptions().ClientType(mtest.Mock))
+	mt.Run("user_inactive", func(mt *mtest.T) {
+		r := registerResolver(mt)
+		uid := primitive.NewObjectID()
+
+		tokens, err := r.jwtSvc.IssueTokenPair(uid.Hex(), "inactive@example.com", model.UserRoleCustomer)
+		require.NoError(t, err)
+
+		doc := bson.D{
+			{Key: "_id", Value: uid},
+			{Key: "email", Value: "inactive@example.com"},
+			{Key: "password_hash", Value: "hash"},
+			{Key: "name", Value: "Inactive User"},
+			{Key: "role", Value: "CUSTOMER"},
+			{Key: "is_active", Value: false},
+			{Key: "created_at", Value: time.Now().UTC()},
+			{Key: "updated_at", Value: time.Now().UTC()},
+		}
+		mt.AddMockResponses(mtest.CreateCursorResponse(1, "ganja-livre.users", mtest.FirstBatch, doc))
+
+		_, err = doRefreshToken(r, tokens.RefreshToken)
+		require.Error(t, err)
+		assert.Equal(t, errInvalidToken, err)
+	})
+}
