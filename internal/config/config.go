@@ -64,7 +64,7 @@ func Load() (*Config, error) {
 		},
 		MongoDB: MongoConfig{
 			URI:            mustGetEnv("MONGODB_URI"),
-			Database:       getEnv("MONGODB_DATABASE", "ganja_livre"),
+			Database:       getEnv("MONGODB_DATABASE", "ganja-livre"),
 			ConnectTimeout: getEnvDuration("MONGODB_CONNECT_TIMEOUT", 10*time.Second),
 			MaxPoolSize:    getEnvUint64("MONGODB_MAX_POOL_SIZE", 100),
 		},

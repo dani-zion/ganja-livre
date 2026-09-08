@@ -7,9 +7,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/dani-zion/ganja_livre/internal/graph/model"
-	"github.com/dani-zion/ganja_livre/internal/middleware"
-	"github.com/dani-zion/ganja_livre/internal/validator"
+	"github.com/dani-zion/ganja-livre/internal/graph/model"
+	"github.com/dani-zion/ganja-livre/internal/middleware"
+	"github.com/dani-zion/ganja-livre/internal/validator"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"

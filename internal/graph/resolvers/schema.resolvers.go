@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dani-zion/ganja_livre/internal/graph/generated"
-	"github.com/dani-zion/ganja_livre/internal/graph/model"
-	dbmodel "github.com/dani-zion/ganja_livre/internal/model"
+	"github.com/dani-zion/ganja-livre/internal/graph/generated"
+	"github.com/dani-zion/ganja-livre/internal/graph/model"
+	dbmodel "github.com/dani-zion/ganja-livre/internal/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

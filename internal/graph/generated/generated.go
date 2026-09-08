@@ -14,7 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/dani-zion/ganja_livre/internal/graph/model"
+	"github.com/dani-zion/ganja-livre/internal/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -1138,7 +1138,7 @@ func (ec *executionContext) field_Mutation_createProduct_args(ctx context.Contex
 	var arg0 model.CreateProductInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateProductInput2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐCreateProductInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateProductInput2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐCreateProductInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1168,7 +1168,7 @@ func (ec *executionContext) field_Mutation_login_args(ctx context.Context, rawAr
 	var arg0 model.LoginInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNLoginInput2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐLoginInput(ctx, tmp)
+		arg0, err = ec.unmarshalNLoginInput2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐLoginInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1183,7 +1183,7 @@ func (ec *executionContext) field_Mutation_placeOrder_args(ctx context.Context, 
 	var arg0 model.PlaceOrderInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNPlaceOrderInput2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐPlaceOrderInput(ctx, tmp)
+		arg0, err = ec.unmarshalNPlaceOrderInput2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐPlaceOrderInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1213,7 +1213,7 @@ func (ec *executionContext) field_Mutation_register_args(ctx context.Context, ra
 	var arg0 model.RegisterInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNRegisterInput2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐRegisterInput(ctx, tmp)
+		arg0, err = ec.unmarshalNRegisterInput2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐRegisterInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1237,7 +1237,7 @@ func (ec *executionContext) field_Mutation_updateOrderStatus_args(ctx context.Co
 	var arg1 model.OrderStatus
 	if tmp, ok := rawArgs["status"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-		arg1, err = ec.unmarshalNOrderStatus2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx, tmp)
+		arg1, err = ec.unmarshalNOrderStatus2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1261,7 +1261,7 @@ func (ec *executionContext) field_Mutation_updateProduct_args(ctx context.Contex
 	var arg1 model.UpdateProductInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalNUpdateProductInput2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐUpdateProductInput(ctx, tmp)
+		arg1, err = ec.unmarshalNUpdateProductInput2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐUpdateProductInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1291,7 +1291,7 @@ func (ec *executionContext) field_Query_allOrders_args(ctx context.Context, rawA
 	var arg0 *model.OrderStatus
 	if tmp, ok := rawArgs["status"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
-		arg0, err = ec.unmarshalOOrderStatus2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx, tmp)
+		arg0, err = ec.unmarshalOOrderStatus2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1336,7 +1336,7 @@ func (ec *executionContext) field_Query_products_args(ctx context.Context, rawAr
 	var arg0 *model.ProductFilterInput
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalOProductFilterInput2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductFilterInput(ctx, tmp)
+		arg0, err = ec.unmarshalOProductFilterInput2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductFilterInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1866,7 +1866,7 @@ func (ec *executionContext) _AuthPayload_user(ctx context.Context, field graphql
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_AuthPayload_user(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1926,7 +1926,7 @@ func (ec *executionContext) _Mutation_register(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.AuthPayload)
 	fc.Result = res
-	return ec.marshalNAuthPayload2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐAuthPayload(ctx, field.Selections, res)
+	return ec.marshalNAuthPayload2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐAuthPayload(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_register(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1989,7 +1989,7 @@ func (ec *executionContext) _Mutation_login(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.AuthPayload)
 	fc.Result = res
-	return ec.marshalNAuthPayload2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐAuthPayload(ctx, field.Selections, res)
+	return ec.marshalNAuthPayload2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐAuthPayload(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_login(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2052,7 +2052,7 @@ func (ec *executionContext) _Mutation_refreshToken(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.AuthPayload)
 	fc.Result = res
-	return ec.marshalNAuthPayload2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐAuthPayload(ctx, field.Selections, res)
+	return ec.marshalNAuthPayload2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐAuthPayload(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_refreshToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2115,7 +2115,7 @@ func (ec *executionContext) _Mutation_createProduct(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Product)
 	fc.Result = res
-	return ec.marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProduct(ctx, field.Selections, res)
+	return ec.marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProduct(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createProduct(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2202,7 +2202,7 @@ func (ec *executionContext) _Mutation_updateProduct(ctx context.Context, field g
 	}
 	res := resTmp.(*model.Product)
 	fc.Result = res
-	return ec.marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProduct(ctx, field.Selections, res)
+	return ec.marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProduct(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateProduct(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2344,7 +2344,7 @@ func (ec *executionContext) _Mutation_placeOrder(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.Order)
 	fc.Result = res
-	return ec.marshalNOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
+	return ec.marshalNOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_placeOrder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2421,7 +2421,7 @@ func (ec *executionContext) _Mutation_cancelOrder(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Order)
 	fc.Result = res
-	return ec.marshalNOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
+	return ec.marshalNOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_cancelOrder(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2498,7 +2498,7 @@ func (ec *executionContext) _Mutation_updateOrderStatus(ctx context.Context, fie
 	}
 	res := resTmp.(*model.Order)
 	fc.Result = res
-	return ec.marshalNOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
+	return ec.marshalNOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateOrderStatus(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2619,7 +2619,7 @@ func (ec *executionContext) _Order_buyer(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Order_buyer(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2679,7 +2679,7 @@ func (ec *executionContext) _Order_items(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.OrderItem)
 	fc.Result = res
-	return ec.marshalNOrderItem2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderItemᚄ(ctx, field.Selections, res)
+	return ec.marshalNOrderItem2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderItemᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Order_items(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2777,7 +2777,7 @@ func (ec *executionContext) _Order_status(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.(model.OrderStatus)
 	fc.Result = res
-	return ec.marshalNOrderStatus2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx, field.Selections, res)
+	return ec.marshalNOrderStatus2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Order_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2821,7 +2821,7 @@ func (ec *executionContext) _Order_shippingAddress(ctx context.Context, field gr
 	}
 	res := resTmp.(model.Address)
 	fc.Result = res
-	return ec.marshalNAddress2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐAddress(ctx, field.Selections, res)
+	return ec.marshalNAddress2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐAddress(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Order_shippingAddress(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3056,7 +3056,7 @@ func (ec *executionContext) _OrderItem_product(ctx context.Context, field graphq
 	}
 	res := resTmp.(*model.Product)
 	fc.Result = res
-	return ec.marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProduct(ctx, field.Selections, res)
+	return ec.marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProduct(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_OrderItem_product(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3566,7 +3566,7 @@ func (ec *executionContext) _Product_category(ctx context.Context, field graphql
 	}
 	res := resTmp.(model.ProductCategory)
 	fc.Result = res
-	return ec.marshalNProductCategory2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx, field.Selections, res)
+	return ec.marshalNProductCategory2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Product_category(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3906,7 +3906,7 @@ func (ec *executionContext) _Product_seller(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Product_seller(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4098,7 +4098,7 @@ func (ec *executionContext) _ProductConnection_edges(ctx context.Context, field 
 	}
 	res := resTmp.([]*model.ProductEdge)
 	fc.Result = res
-	return ec.marshalNProductEdge2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductEdgeᚄ(ctx, field.Selections, res)
+	return ec.marshalNProductEdge2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductEdgeᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProductConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4148,7 +4148,7 @@ func (ec *executionContext) _ProductConnection_pageInfo(ctx context.Context, fie
 	}
 	res := resTmp.(*model.PageInfo)
 	fc.Result = res
-	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProductConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4246,7 +4246,7 @@ func (ec *executionContext) _ProductEdge_node(ctx context.Context, field graphql
 	}
 	res := resTmp.(*model.Product)
 	fc.Result = res
-	return ec.marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProduct(ctx, field.Selections, res)
+	return ec.marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProduct(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ProductEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4366,7 +4366,7 @@ func (ec *executionContext) _Query_products(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.ProductConnection)
 	fc.Result = res
-	return ec.marshalNProductConnection2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductConnection(ctx, field.Selections, res)
+	return ec.marshalNProductConnection2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_products(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4426,7 +4426,7 @@ func (ec *executionContext) _Query_product(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.Product)
 	fc.Result = res
-	return ec.marshalOProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProduct(ctx, field.Selections, res)
+	return ec.marshalOProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProduct(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_product(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4513,7 +4513,7 @@ func (ec *executionContext) _Query_me(ctx context.Context, field graphql.Collect
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_me(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4573,7 +4573,7 @@ func (ec *executionContext) _Query_myOrders(ctx context.Context, field graphql.C
 	}
 	res := resTmp.([]*model.Order)
 	fc.Result = res
-	return ec.marshalNOrder2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderᚄ(ctx, field.Selections, res)
+	return ec.marshalNOrder2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_myOrders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4636,7 +4636,7 @@ func (ec *executionContext) _Query_order(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.Order)
 	fc.Result = res
-	return ec.marshalOOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
+	return ec.marshalOOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrder(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_order(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4713,7 +4713,7 @@ func (ec *executionContext) _Query_sellerProducts(ctx context.Context, field gra
 	}
 	res := resTmp.([]*model.Product)
 	fc.Result = res
-	return ec.marshalNProduct2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductᚄ(ctx, field.Selections, res)
+	return ec.marshalNProduct2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_sellerProducts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -4789,7 +4789,7 @@ func (ec *executionContext) _Query_allOrders(ctx context.Context, field graphql.
 	}
 	res := resTmp.([]*model.Order)
 	fc.Result = res
-	return ec.marshalNOrder2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderᚄ(ctx, field.Selections, res)
+	return ec.marshalNOrder2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_allOrders(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5127,7 +5127,7 @@ func (ec *executionContext) _User_role(ctx context.Context, field graphql.Collec
 	}
 	res := resTmp.(model.UserRole)
 	fc.Result = res
-	return ec.marshalNUserRole2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐUserRole(ctx, field.Selections, res)
+	return ec.marshalNUserRole2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐUserRole(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_role(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5168,7 +5168,7 @@ func (ec *executionContext) _User_address(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.(*model.Address)
 	fc.Result = res
-	return ec.marshalOAddress2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐAddress(ctx, field.Selections, res)
+	return ec.marshalOAddress2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐAddress(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_User_address(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7169,7 +7169,7 @@ func (ec *executionContext) unmarshalInputCreateProductInput(ctx context.Context
 			it.Description = data
 		case "category":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("category"))
-			data, err := ec.unmarshalNProductCategory2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx, v)
+			data, err := ec.unmarshalNProductCategory2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -7313,14 +7313,14 @@ func (ec *executionContext) unmarshalInputPlaceOrderInput(ctx context.Context, o
 		switch k {
 		case "items":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("items"))
-			data, err := ec.unmarshalNOrderItemInput2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderItemInputᚄ(ctx, v)
+			data, err := ec.unmarshalNOrderItemInput2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderItemInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Items = data
 		case "shippingAddress":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("shippingAddress"))
-			data, err := ec.unmarshalNAddressInput2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐAddressInput(ctx, v)
+			data, err := ec.unmarshalNAddressInput2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐAddressInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -7347,7 +7347,7 @@ func (ec *executionContext) unmarshalInputProductFilterInput(ctx context.Context
 		switch k {
 		case "category":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("category"))
-			data, err := ec.unmarshalOProductCategory2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx, v)
+			data, err := ec.unmarshalOProductCategory2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8720,20 +8720,20 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAddress2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐAddress(ctx context.Context, sel ast.SelectionSet, v model.Address) graphql.Marshaler {
+func (ec *executionContext) marshalNAddress2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐAddress(ctx context.Context, sel ast.SelectionSet, v model.Address) graphql.Marshaler {
 	return ec._Address(ctx, sel, &v)
 }
 
-func (ec *executionContext) unmarshalNAddressInput2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐAddressInput(ctx context.Context, v interface{}) (model.AddressInput, error) {
+func (ec *executionContext) unmarshalNAddressInput2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐAddressInput(ctx context.Context, v interface{}) (model.AddressInput, error) {
 	res, err := ec.unmarshalInputAddressInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAuthPayload2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐAuthPayload(ctx context.Context, sel ast.SelectionSet, v model.AuthPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAuthPayload2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐAuthPayload(ctx context.Context, sel ast.SelectionSet, v model.AuthPayload) graphql.Marshaler {
 	return ec._AuthPayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAuthPayload2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐAuthPayload(ctx context.Context, sel ast.SelectionSet, v *model.AuthPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAuthPayload2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐAuthPayload(ctx context.Context, sel ast.SelectionSet, v *model.AuthPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8758,7 +8758,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNCreateProductInput2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐCreateProductInput(ctx context.Context, v interface{}) (model.CreateProductInput, error) {
+func (ec *executionContext) unmarshalNCreateProductInput2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐCreateProductInput(ctx context.Context, v interface{}) (model.CreateProductInput, error) {
 	res, err := ec.unmarshalInputCreateProductInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -8808,16 +8808,16 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) unmarshalNLoginInput2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐLoginInput(ctx context.Context, v interface{}) (model.LoginInput, error) {
+func (ec *executionContext) unmarshalNLoginInput2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐLoginInput(ctx context.Context, v interface{}) (model.LoginInput, error) {
 	res, err := ec.unmarshalInputLoginInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNOrder2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrder(ctx context.Context, sel ast.SelectionSet, v model.Order) graphql.Marshaler {
+func (ec *executionContext) marshalNOrder2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrder(ctx context.Context, sel ast.SelectionSet, v model.Order) graphql.Marshaler {
 	return ec._Order(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNOrder2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Order) graphql.Marshaler {
+func (ec *executionContext) marshalNOrder2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Order) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -8841,7 +8841,7 @@ func (ec *executionContext) marshalNOrder2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋgan
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrder(ctx, sel, v[i])
+			ret[i] = ec.marshalNOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrder(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -8861,7 +8861,7 @@ func (ec *executionContext) marshalNOrder2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋgan
 	return ret
 }
 
-func (ec *executionContext) marshalNOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrder(ctx context.Context, sel ast.SelectionSet, v *model.Order) graphql.Marshaler {
+func (ec *executionContext) marshalNOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrder(ctx context.Context, sel ast.SelectionSet, v *model.Order) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8871,7 +8871,7 @@ func (ec *executionContext) marshalNOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_
 	return ec._Order(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNOrderItem2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderItemᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.OrderItem) graphql.Marshaler {
+func (ec *executionContext) marshalNOrderItem2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderItemᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.OrderItem) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -8895,7 +8895,7 @@ func (ec *executionContext) marshalNOrderItem2ᚕᚖgithubᚗcomᚋdaniᚑzion�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNOrderItem2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderItem(ctx, sel, v[i])
+			ret[i] = ec.marshalNOrderItem2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderItem(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -8915,7 +8915,7 @@ func (ec *executionContext) marshalNOrderItem2ᚕᚖgithubᚗcomᚋdaniᚑzion�
 	return ret
 }
 
-func (ec *executionContext) marshalNOrderItem2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderItem(ctx context.Context, sel ast.SelectionSet, v *model.OrderItem) graphql.Marshaler {
+func (ec *executionContext) marshalNOrderItem2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderItem(ctx context.Context, sel ast.SelectionSet, v *model.OrderItem) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8925,7 +8925,7 @@ func (ec *executionContext) marshalNOrderItem2ᚖgithubᚗcomᚋdaniᚑzionᚋga
 	return ec._OrderItem(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNOrderItemInput2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderItemInputᚄ(ctx context.Context, v interface{}) ([]*model.OrderItemInput, error) {
+func (ec *executionContext) unmarshalNOrderItemInput2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderItemInputᚄ(ctx context.Context, v interface{}) ([]*model.OrderItemInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -8934,7 +8934,7 @@ func (ec *executionContext) unmarshalNOrderItemInput2ᚕᚖgithubᚗcomᚋdani�
 	res := make([]*model.OrderItemInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNOrderItemInput2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderItemInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNOrderItemInput2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderItemInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -8942,18 +8942,18 @@ func (ec *executionContext) unmarshalNOrderItemInput2ᚕᚖgithubᚗcomᚋdani�
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNOrderItemInput2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderItemInput(ctx context.Context, v interface{}) (*model.OrderItemInput, error) {
+func (ec *executionContext) unmarshalNOrderItemInput2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderItemInput(ctx context.Context, v interface{}) (*model.OrderItemInput, error) {
 	res, err := ec.unmarshalInputOrderItemInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNOrderStatus2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx context.Context, v interface{}) (model.OrderStatus, error) {
+func (ec *executionContext) unmarshalNOrderStatus2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx context.Context, v interface{}) (model.OrderStatus, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.OrderStatus(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNOrderStatus2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx context.Context, sel ast.SelectionSet, v model.OrderStatus) graphql.Marshaler {
+func (ec *executionContext) marshalNOrderStatus2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx context.Context, sel ast.SelectionSet, v model.OrderStatus) graphql.Marshaler {
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -8963,7 +8963,7 @@ func (ec *executionContext) marshalNOrderStatus2githubᚗcomᚋdaniᚑzionᚋgan
 	return res
 }
 
-func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
+func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -8973,16 +8973,16 @@ func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋdaniᚑzionᚋgan
 	return ec._PageInfo(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNPlaceOrderInput2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐPlaceOrderInput(ctx context.Context, v interface{}) (model.PlaceOrderInput, error) {
+func (ec *executionContext) unmarshalNPlaceOrderInput2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐPlaceOrderInput(ctx context.Context, v interface{}) (model.PlaceOrderInput, error) {
 	res, err := ec.unmarshalInputPlaceOrderInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNProduct2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProduct(ctx context.Context, sel ast.SelectionSet, v model.Product) graphql.Marshaler {
+func (ec *executionContext) marshalNProduct2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProduct(ctx context.Context, sel ast.SelectionSet, v model.Product) graphql.Marshaler {
 	return ec._Product(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNProduct2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Product) graphql.Marshaler {
+func (ec *executionContext) marshalNProduct2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Product) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -9006,7 +9006,7 @@ func (ec *executionContext) marshalNProduct2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProduct(ctx, sel, v[i])
+			ret[i] = ec.marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProduct(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9026,7 +9026,7 @@ func (ec *executionContext) marshalNProduct2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋg
 	return ret
 }
 
-func (ec *executionContext) marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProduct(ctx context.Context, sel ast.SelectionSet, v *model.Product) graphql.Marshaler {
+func (ec *executionContext) marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProduct(ctx context.Context, sel ast.SelectionSet, v *model.Product) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9036,13 +9036,13 @@ func (ec *executionContext) marshalNProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganj
 	return ec._Product(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNProductCategory2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx context.Context, v interface{}) (model.ProductCategory, error) {
+func (ec *executionContext) unmarshalNProductCategory2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx context.Context, v interface{}) (model.ProductCategory, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.ProductCategory(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNProductCategory2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx context.Context, sel ast.SelectionSet, v model.ProductCategory) graphql.Marshaler {
+func (ec *executionContext) marshalNProductCategory2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx context.Context, sel ast.SelectionSet, v model.ProductCategory) graphql.Marshaler {
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -9052,11 +9052,11 @@ func (ec *executionContext) marshalNProductCategory2githubᚗcomᚋdaniᚑzion�
 	return res
 }
 
-func (ec *executionContext) marshalNProductConnection2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductConnection(ctx context.Context, sel ast.SelectionSet, v model.ProductConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNProductConnection2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductConnection(ctx context.Context, sel ast.SelectionSet, v model.ProductConnection) graphql.Marshaler {
 	return ec._ProductConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNProductConnection2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductConnection(ctx context.Context, sel ast.SelectionSet, v *model.ProductConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNProductConnection2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductConnection(ctx context.Context, sel ast.SelectionSet, v *model.ProductConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9066,7 +9066,7 @@ func (ec *executionContext) marshalNProductConnection2ᚖgithubᚗcomᚋdaniᚑz
 	return ec._ProductConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProductEdge2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ProductEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNProductEdge2ᚕᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ProductEdge) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -9090,7 +9090,7 @@ func (ec *executionContext) marshalNProductEdge2ᚕᚖgithubᚗcomᚋdaniᚑzion
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNProductEdge2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalNProductEdge2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -9110,7 +9110,7 @@ func (ec *executionContext) marshalNProductEdge2ᚕᚖgithubᚗcomᚋdaniᚑzion
 	return ret
 }
 
-func (ec *executionContext) marshalNProductEdge2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductEdge(ctx context.Context, sel ast.SelectionSet, v *model.ProductEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNProductEdge2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductEdge(ctx context.Context, sel ast.SelectionSet, v *model.ProductEdge) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9120,7 +9120,7 @@ func (ec *executionContext) marshalNProductEdge2ᚖgithubᚗcomᚋdaniᚑzionᚋ
 	return ec._ProductEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNRegisterInput2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐRegisterInput(ctx context.Context, v interface{}) (model.RegisterInput, error) {
+func (ec *executionContext) unmarshalNRegisterInput2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐRegisterInput(ctx context.Context, v interface{}) (model.RegisterInput, error) {
 	res, err := ec.unmarshalInputRegisterInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -9187,16 +9187,16 @@ func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) unmarshalNUpdateProductInput2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐUpdateProductInput(ctx context.Context, v interface{}) (model.UpdateProductInput, error) {
+func (ec *executionContext) unmarshalNUpdateProductInput2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐUpdateProductInput(ctx context.Context, v interface{}) (model.UpdateProductInput, error) {
 	res, err := ec.unmarshalInputUpdateProductInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNUser2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -9206,13 +9206,13 @@ func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_l
 	return ec._User(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNUserRole2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐUserRole(ctx context.Context, v interface{}) (model.UserRole, error) {
+func (ec *executionContext) unmarshalNUserRole2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐUserRole(ctx context.Context, v interface{}) (model.UserRole, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := model.UserRole(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNUserRole2githubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐUserRole(ctx context.Context, sel ast.SelectionSet, v model.UserRole) graphql.Marshaler {
+func (ec *executionContext) marshalNUserRole2githubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐUserRole(ctx context.Context, sel ast.SelectionSet, v model.UserRole) graphql.Marshaler {
 	res := graphql.MarshalString(string(v))
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -9475,7 +9475,7 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) marshalOAddress2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐAddress(ctx context.Context, sel ast.SelectionSet, v *model.Address) graphql.Marshaler {
+func (ec *executionContext) marshalOAddress2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐAddress(ctx context.Context, sel ast.SelectionSet, v *model.Address) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9540,14 +9540,14 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) marshalOOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrder(ctx context.Context, sel ast.SelectionSet, v *model.Order) graphql.Marshaler {
+func (ec *executionContext) marshalOOrder2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrder(ctx context.Context, sel ast.SelectionSet, v *model.Order) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Order(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOOrderStatus2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx context.Context, v interface{}) (*model.OrderStatus, error) {
+func (ec *executionContext) unmarshalOOrderStatus2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx context.Context, v interface{}) (*model.OrderStatus, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -9556,7 +9556,7 @@ func (ec *executionContext) unmarshalOOrderStatus2ᚖgithubᚗcomᚋdaniᚑzion�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOOrderStatus2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx context.Context, sel ast.SelectionSet, v *model.OrderStatus) graphql.Marshaler {
+func (ec *executionContext) marshalOOrderStatus2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐOrderStatus(ctx context.Context, sel ast.SelectionSet, v *model.OrderStatus) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9564,14 +9564,14 @@ func (ec *executionContext) marshalOOrderStatus2ᚖgithubᚗcomᚋdaniᚑzionᚋ
 	return res
 }
 
-func (ec *executionContext) marshalOProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProduct(ctx context.Context, sel ast.SelectionSet, v *model.Product) graphql.Marshaler {
+func (ec *executionContext) marshalOProduct2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProduct(ctx context.Context, sel ast.SelectionSet, v *model.Product) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Product(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOProductCategory2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx context.Context, v interface{}) (*model.ProductCategory, error) {
+func (ec *executionContext) unmarshalOProductCategory2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx context.Context, v interface{}) (*model.ProductCategory, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -9580,7 +9580,7 @@ func (ec *executionContext) unmarshalOProductCategory2ᚖgithubᚗcomᚋdaniᚑz
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOProductCategory2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx context.Context, sel ast.SelectionSet, v *model.ProductCategory) graphql.Marshaler {
+func (ec *executionContext) marshalOProductCategory2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductCategory(ctx context.Context, sel ast.SelectionSet, v *model.ProductCategory) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -9588,7 +9588,7 @@ func (ec *executionContext) marshalOProductCategory2ᚖgithubᚗcomᚋdaniᚑzio
 	return res
 }
 
-func (ec *executionContext) unmarshalOProductFilterInput2ᚖgithubᚗcomᚋdaniᚑzionᚋganja_livreᚋinternalᚋgraphᚋmodelᚐProductFilterInput(ctx context.Context, v interface{}) (*model.ProductFilterInput, error) {
+func (ec *executionContext) unmarshalOProductFilterInput2ᚖgithubᚗcomᚋdaniᚑzionᚋganjaᚑlivreᚋinternalᚋgraphᚋmodelᚐProductFilterInput(ctx context.Context, v interface{}) (*model.ProductFilterInput, error) {
 	if v == nil {
 		return nil, nil
 	}

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/dani-zion/ganja_livre/internal/config"
-	"github.com/dani-zion/ganja_livre/internal/graph/model"
+	"github.com/dani-zion/ganja-livre/internal/config"
+	"github.com/dani-zion/ganja-livre/internal/graph/model"
 	"github.com/golang-jwt/jwt/v5"
 )
 

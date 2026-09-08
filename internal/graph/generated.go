@@ -15,7 +15,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	appmw "github.com/dani-zion/ganja_livre/internal/middleware"
+	appmw "github.com/dani-zion/ganja-livre/internal/middleware"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )

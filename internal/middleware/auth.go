@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/dani-zion/ganja_livre/internal/auth"
-	"github.com/dani-zion/ganja_livre/internal/graph/model"
+	"github.com/dani-zion/ganja-livre/internal/auth"
+	"github.com/dani-zion/ganja-livre/internal/graph/model"
 	"go.uber.org/zap"
 )
 

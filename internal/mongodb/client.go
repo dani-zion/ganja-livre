@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/dani-zion/ganja_livre/internal/config"
+	"github.com/dani-zion/ganja-livre/internal/config"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dani-zion/ganja_livre/internal/auth"
-	"github.com/dani-zion/ganja_livre/internal/config"
-	"github.com/dani-zion/ganja_livre/internal/graph/model"
-	"github.com/dani-zion/ganja_livre/internal/mongodb"
+	"github.com/dani-zion/ganja-livre/internal/auth"
+	"github.com/dani-zion/ganja-livre/internal/config"
+	"github.com/dani-zion/ganja-livre/internal/graph/model"
+	"github.com/dani-zion/ganja-livre/internal/mongodb"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
@@ -233,7 +233,7 @@ func TestLogin_Success(t *testing.T) {
 		hash, _ := bcrypt.GenerateFromPassword([]byte("mypassword"), bcrypt.DefaultCost)
 		doc := userDoc("login@example.com", string(hash), "Login User", "CUSTOMER")
 
-		mt.AddMockResponses(mtest.CreateCursorResponse(1, "ganja_livre.users", mtest.FirstBatch, doc))
+		mt.AddMockResponses(mtest.CreateCursorResponse(1, "ganja-livre.users", mtest.FirstBatch, doc))
 
 		payload, err := doLogin(r, model.LoginInput{
 			Email:    "login@example.com",
@@ -281,7 +281,7 @@ func TestLogin_UserNotFound(t *testing.T) {
 	mt := mtest.New(t, mtest.NewOptions().ClientType(mtest.Mock))
 	mt.Run("user_not_found", func(mt *mtest.T) {
 		r := registerResolver(mt)
-		mt.AddMockResponses(mtest.CreateCursorResponse(0, "ganja_livre.users", mtest.FirstBatch))
+		mt.AddMockResponses(mtest.CreateCursorResponse(0, "ganja-livre.users", mtest.FirstBatch))
 
 		_, err := doLogin(r, model.LoginInput{
 			Email:    "nobody@example.com",
@@ -300,7 +300,7 @@ func TestLogin_WrongPassword(t *testing.T) {
 		hash, _ := bcrypt.GenerateFromPassword([]byte("correctpassword"), bcrypt.DefaultCost)
 		doc := userDoc("login@example.com", string(hash), "Login User", "CUSTOMER")
 
-		mt.AddMockResponses(mtest.CreateCursorResponse(1, "ganja_livre.users", mtest.FirstBatch, doc))
+		mt.AddMockResponses(mtest.CreateCursorResponse(1, "ganja-livre.users", mtest.FirstBatch, doc))
 
 		_, err := doLogin(r, model.LoginInput{
 			Email:    "login@example.com",
@@ -319,7 +319,7 @@ func TestLogin_WhitespaceEmailTrimmed(t *testing.T) {
 		hash, _ := bcrypt.GenerateFromPassword([]byte("mypassword"), bcrypt.DefaultCost)
 		doc := userDoc("login@example.com", string(hash), "Login User", "CUSTOMER")
 
-		mt.AddMockResponses(mtest.CreateCursorResponse(0, "ganja_livre.users", mtest.FirstBatch, doc))
+		mt.AddMockResponses(mtest.CreateCursorResponse(0, "ganja-livre.users", mtest.FirstBatch, doc))
 
 		payload, err := doLogin(r, model.LoginInput{
 			Email:    "  login@example.com  ",
@@ -338,7 +338,7 @@ func TestLogin_TokensAreValid(t *testing.T) {
 		hash, _ := bcrypt.GenerateFromPassword([]byte("mypassword"), bcrypt.DefaultCost)
 		doc := userDoc("token@example.com", string(hash), "Token User", "SELLER")
 
-		mt.AddMockResponses(mtest.CreateCursorResponse(0, "ganja_livre.users", mtest.FirstBatch, doc))
+		mt.AddMockResponses(mtest.CreateCursorResponse(0, "ganja-livre.users", mtest.FirstBatch, doc))
 
 		payload, err := doLogin(r, model.LoginInput{
 			Email:    "token@example.com",
