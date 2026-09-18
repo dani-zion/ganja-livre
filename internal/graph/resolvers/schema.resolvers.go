@@ -42,7 +42,7 @@ func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInp
 		Email:        input.Email,
 		PasswordHash: string(hash),
 		Name:         input.Name,
-		Role:         dbmodel.RoleCustomer,
+		Role:         dbmodel.RoleSeller,
 		IsActive:     true,
 		CreatedAt:    now,
 		UpdatedAt:    now,
@@ -157,21 +157,6 @@ func (r *mutationResolver) RefreshToken(ctx context.Context, token string) (*mod
 	}, nil
 }
 
-// CreateProduct is the resolver for the createProduct field.
-func (r *mutationResolver) CreateProduct(ctx context.Context, input model.CreateProductInput) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented: CreateProduct - createProduct"))
-}
-
-// UpdateProduct is the resolver for the updateProduct field.
-func (r *mutationResolver) UpdateProduct(ctx context.Context, id string, input model.UpdateProductInput) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented: UpdateProduct - updateProduct"))
-}
-
-// DeleteProduct is the resolver for the deleteProduct field.
-func (r *mutationResolver) DeleteProduct(ctx context.Context, id string) (bool, error) {
-	panic(fmt.Errorf("not implemented: DeleteProduct - deleteProduct"))
-}
-
 // PlaceOrder is the resolver for the placeOrder field.
 func (r *mutationResolver) PlaceOrder(ctx context.Context, input model.PlaceOrderInput) (*model.Order, error) {
 	panic(fmt.Errorf("not implemented: PlaceOrder - placeOrder"))
@@ -187,16 +172,6 @@ func (r *mutationResolver) UpdateOrderStatus(ctx context.Context, id string, sta
 	panic(fmt.Errorf("not implemented: UpdateOrderStatus - updateOrderStatus"))
 }
 
-// Products is the resolver for the products field.
-func (r *queryResolver) Products(ctx context.Context, filter *model.ProductFilterInput, first *int, after *string) (*model.ProductConnection, error) {
-	panic(fmt.Errorf("not implemented: Products - products"))
-}
-
-// Product is the resolver for the product field.
-func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented: Product - product"))
-}
-
 // Me is the resolver for the me field.
 func (r *queryResolver) Me(ctx context.Context) (*model.User, error) {
 	panic(fmt.Errorf("not implemented: Me - me"))
@@ -210,11 +185,6 @@ func (r *queryResolver) MyOrders(ctx context.Context) ([]*model.Order, error) {
 // Order is the resolver for the order field.
 func (r *queryResolver) Order(ctx context.Context, id string) (*model.Order, error) {
 	panic(fmt.Errorf("not implemented: Order - order"))
-}
-
-// SellerProducts is the resolver for the sellerProducts field.
-func (r *queryResolver) SellerProducts(ctx context.Context) ([]*model.Product, error) {
-	panic(fmt.Errorf("not implemented: SellerProducts - sellerProducts"))
 }
 
 // AllOrders is the resolver for the allOrders field.
