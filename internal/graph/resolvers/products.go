@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 package resolvers
 
 import (
@@ -9,6 +6,7 @@ import (
 
 	"github.com/dani-zion/ganja-livre/internal/graph/model"
 	"github.com/dani-zion/ganja-livre/internal/middleware"
+	dbmodel "github.com/dani-zion/ganja-livre/internal/model"
 	"github.com/dani-zion/ganja-livre/internal/validator"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -18,8 +16,8 @@ import (
 const defaultPageSize = 20
 
 // CreateProduct allows sellers and admins to add products.
-func (r *Resolver) CreateProduct(ctx context.Context, input CreateProductInput) (*model.Product, error) {
-	claims, err := middleware.RequireRole(ctx, model.RoleSeller, model.RoleAdmin)
+func (r *mutationResolver) CreateProduct(ctx context.Context, input model.CreateProductInput) (*model.Product, error) {
+	claims, err := middleware.RequireRole(ctx, model.UserRoleSeller, model.UserRoleAdmin)
 	if err != nil {
 		return nil, err
 	}
@@ -30,23 +28,23 @@ func (r *Resolver) CreateProduct(ctx context.Context, input CreateProductInput) 
 	if err = validator.Stock(input.Stock); err != nil {
 		return nil, err
 	}
-	if input.THCContent != nil {
-		if err = validator.PercentContent(*input.THCContent, "thcContent"); err != nil {
+	if input.ThcContent != nil {
+		if err = validator.PercentContent(*input.ThcContent, "thcContent"); err != nil {
 			return nil, err
 		}
 	}
 
 	sellerID, _ := primitive.ObjectIDFromHex(claims.UserID)
 	now := time.Now().UTC()
-	product := &model.Product{
+	dbProduct := dbmodel.Product{
 		ID:          primitive.NewObjectID(),
 		Name:        input.Name,
 		Description: input.Description,
-		Category:    input.Category,
+		Category:    dbmodel.ProductCategory(input.Category),
 		Price:       input.Price,
 		Stock:       input.Stock,
-		THCContent:  input.THCContent,
-		CBDContent:  input.CBDContent,
+		THCContent:  input.ThcContent,
+		CBDContent:  input.CbdContent,
 		Strain:      input.Strain,
 		Origin:      input.Origin,
 		ImageURLs:   input.ImageURLs,
@@ -56,15 +54,32 @@ func (r *Resolver) CreateProduct(ctx context.Context, input CreateProductInput) 
 		UpdatedAt:   now,
 	}
 
-	if _, err = r.cols.Products.InsertOne(ctx, product); err != nil {
+	if _, err = r.cols.Products.InsertOne(ctx, dbProduct); err != nil {
 		return nil, errInternal
 	}
-	return product, nil
+
+	return &model.Product{
+		ID:          dbProduct.ID.Hex(),
+		Name:        dbProduct.Name,
+		Description: dbProduct.Description,
+		Category:    model.ProductCategory(dbProduct.Category),
+		Price:       dbProduct.Price,
+		Stock:       dbProduct.Stock,
+		ThcContent:  dbProduct.THCContent,
+		CbdContent:  dbProduct.CBDContent,
+		Strain:      dbProduct.Strain,
+		Origin:      dbProduct.Origin,
+		ImageURLs:   dbProduct.ImageURLs,
+		SellerID:    dbProduct.SellerID.Hex(),
+		IsActive:    dbProduct.IsActive,
+		CreatedAt:   dbProduct.CreatedAt,
+		UpdatedAt:   dbProduct.UpdatedAt,
+	}, nil
 }
 
 // UpdateProduct lets sellers edit their own products; admins can edit any.
-func (r *Resolver) UpdateProduct(ctx context.Context, id string, input UpdateProductInput) (*model.Product, error) {
-	claims, err := middleware.RequireRole(ctx, model.RoleSeller, model.RoleAdmin)
+func (r *mutationResolver) UpdateProduct(ctx context.Context, id string, input model.UpdateProductInput) (*model.Product, error) {
+	claims, err := middleware.RequireRole(ctx, model.UserRoleSeller, model.UserRoleAdmin)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +90,7 @@ func (r *Resolver) UpdateProduct(ctx context.Context, id string, input UpdatePro
 	}
 
 	filter := bson.M{"_id": oid}
-	if claims.Role == model.RoleSeller {
+	if claims.Role == model.UserRoleSeller {
 		sellerID, _ := primitive.ObjectIDFromHex(claims.UserID)
 		filter["seller_id"] = sellerID
 	}
@@ -108,16 +123,33 @@ func (r *Resolver) UpdateProduct(ctx context.Context, id string, input UpdatePro
 
 	after := options.After
 	opts := options.FindOneAndUpdate().SetReturnDocument(after)
-	var updated model.Product
+	var updated dbmodel.Product
 	if err = r.cols.Products.FindOneAndUpdate(ctx, filter, bson.M{"$set": set}, opts).Decode(&updated); err != nil {
 		return nil, errNotFound
 	}
-	return &updated, nil
+
+	return &model.Product{
+		ID:          updated.ID.Hex(),
+		Name:        updated.Name,
+		Description: updated.Description,
+		Category:    model.ProductCategory(updated.Category),
+		Price:       updated.Price,
+		Stock:       updated.Stock,
+		ThcContent:  updated.THCContent,
+		CbdContent:  updated.CBDContent,
+		Strain:      updated.Strain,
+		Origin:      updated.Origin,
+		ImageURLs:   updated.ImageURLs,
+		SellerID:    updated.SellerID.Hex(),
+		IsActive:    updated.IsActive,
+		CreatedAt:   updated.CreatedAt,
+		UpdatedAt:   updated.UpdatedAt,
+	}, nil
 }
 
 // DeleteProduct soft-deletes (deactivates) a product.
-func (r *Resolver) DeleteProduct(ctx context.Context, id string) (bool, error) {
-	claims, err := middleware.RequireRole(ctx, model.RoleSeller, model.RoleAdmin)
+func (r *mutationResolver) DeleteProduct(ctx context.Context, id string) (bool, error) {
+	claims, err := middleware.RequireRole(ctx, model.UserRoleSeller, model.UserRoleAdmin)
 	if err != nil {
 		return false, err
 	}
@@ -128,7 +160,7 @@ func (r *Resolver) DeleteProduct(ctx context.Context, id string) (bool, error) {
 	}
 
 	filter := bson.M{"_id": oid}
-	if claims.Role == model.RoleSeller {
+	if claims.Role == model.UserRoleSeller {
 		sellerID, _ := primitive.ObjectIDFromHex(claims.UserID)
 		filter["seller_id"] = sellerID
 	}
@@ -143,7 +175,7 @@ func (r *Resolver) DeleteProduct(ctx context.Context, id string) (bool, error) {
 }
 
 // Products lists active products with optional filtering and cursor-based pagination.
-func (r *Resolver) Products(ctx context.Context, filter *ProductFilterInput, first *int, after *string) (*ProductConnection, error) {
+func (r *queryResolver) Products(ctx context.Context, filter *model.ProductFilterInput, first *int, after *string) (*model.ProductConnection, error) {
 	query := bson.M{"is_active": true}
 
 	if filter != nil {
@@ -188,20 +220,36 @@ func (r *Resolver) Products(ctx context.Context, filter *ProductFilterInput, fir
 	}
 	defer cursor.Close(ctx)
 
-	var products []model.Product
-	if err = cursor.All(ctx, &products); err != nil {
+	var dbProducts []dbmodel.Product
+	if err = cursor.All(ctx, &dbProducts); err != nil {
 		return nil, errInternal
 	}
 
-	hasNext := len(products) > int(limit)
+	hasNext := len(dbProducts) > int(limit)
 	if hasNext {
-		products = products[:limit]
+		dbProducts = dbProducts[:limit]
 	}
 
-	edges := make([]*ProductEdge, len(products))
-	for i, p := range products {
-		p := p
-		edges[i] = &ProductEdge{Node: &p, Cursor: p.ID.Hex()}
+	edges := make([]*model.ProductEdge, len(dbProducts))
+	for i, p := range dbProducts {
+		product := model.Product{
+			ID:          p.ID.Hex(),
+			Name:        p.Name,
+			Description: p.Description,
+			Category:    model.ProductCategory(p.Category),
+			Price:       p.Price,
+			Stock:       p.Stock,
+			ThcContent:  p.THCContent,
+			CbdContent:  p.CBDContent,
+			Strain:      p.Strain,
+			Origin:      p.Origin,
+			ImageURLs:   p.ImageURLs,
+			SellerID:    p.SellerID.Hex(),
+			IsActive:    p.IsActive,
+			CreatedAt:   p.CreatedAt,
+			UpdatedAt:   p.UpdatedAt,
+		}
+		edges[i] = &model.ProductEdge{Node: &product, Cursor: p.ID.Hex()}
 	}
 
 	var startCursor, endCursor *string
@@ -214,9 +262,9 @@ func (r *Resolver) Products(ctx context.Context, filter *ProductFilterInput, fir
 
 	total, _ := r.cols.Products.CountDocuments(ctx, bson.M{"is_active": true})
 
-	return &ProductConnection{
+	return &model.ProductConnection{
 		Edges: edges,
-		PageInfo: &PageInfo{
+		PageInfo: &model.PageInfo{
 			HasNextPage:     hasNext,
 			HasPreviousPage: after != nil && *after != "",
 			StartCursor:     startCursor,
@@ -226,57 +274,75 @@ func (r *Resolver) Products(ctx context.Context, filter *ProductFilterInput, fir
 	}, nil
 }
 
-// ─── GQL return types for pagination ─────────────────────────────────────────
+// Product returns a single product by ID.
+func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
+	oid, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, errNotFound
+	}
 
-type ProductConnection struct {
-	Edges      []*ProductEdge
-	PageInfo   *PageInfo
-	TotalCount int
+	var p dbmodel.Product
+	if err = r.cols.Products.FindOne(ctx, bson.M{"_id": oid, "is_active": true}).Decode(&p); err != nil {
+		return nil, errNotFound
+	}
+
+	return &model.Product{
+		ID:          p.ID.Hex(),
+		Name:        p.Name,
+		Description: p.Description,
+		Category:    model.ProductCategory(p.Category),
+		Price:       p.Price,
+		Stock:       p.Stock,
+		ThcContent:  p.THCContent,
+		CbdContent:  p.CBDContent,
+		Strain:      p.Strain,
+		Origin:      p.Origin,
+		ImageURLs:   p.ImageURLs,
+		SellerID:    p.SellerID.Hex(),
+		IsActive:    p.IsActive,
+		CreatedAt:   p.CreatedAt,
+		UpdatedAt:   p.UpdatedAt,
+	}, nil
 }
 
-type ProductEdge struct {
-	Node   *model.Product
-	Cursor string
-}
+// SellerProducts returns all products for the authenticated seller.
+func (r *queryResolver) SellerProducts(ctx context.Context) ([]*model.Product, error) {
+	claims, err := middleware.RequireRole(ctx, model.UserRoleSeller, model.UserRoleAdmin)
+	if err != nil {
+		return nil, err
+	}
 
-type PageInfo struct {
-	HasNextPage     bool
-	HasPreviousPage bool
-	StartCursor     *string
-	EndCursor       *string
-}
+	sellerID, _ := primitive.ObjectIDFromHex(claims.UserID)
+	cursor, err := r.cols.Products.Find(ctx, bson.M{"seller_id": sellerID})
+	if err != nil {
+		return nil, errInternal
+	}
+	defer cursor.Close(ctx)
 
-// ─── Input types ─────────────────────────────────────────────────────────────
+	var dbProducts []dbmodel.Product
+	if err = cursor.All(ctx, &dbProducts); err != nil {
+		return nil, errInternal
+	}
 
-type CreateProductInput struct {
-	Name        string
-	Description string
-	Category    model.ProductCategory
-	Price       float64
-	Stock       int
-	THCContent  *float64
-	CBDContent  *float64
-	Strain      *string
-	Origin      *string
-	ImageURLs   []string
-}
-
-type UpdateProductInput struct {
-	Name        *string
-	Description *string
-	Price       *float64
-	Stock       *int
-	THCContent  *float64
-	CBDContent  *float64
-	Strain      *string
-	Origin      *string
-	ImageURLs   []string
-	IsActive    *bool
-}
-
-type ProductFilterInput struct {
-	Category *model.ProductCategory
-	MinPrice *float64
-	MaxPrice *float64
-	Search   *string
+	products := make([]*model.Product, len(dbProducts))
+	for i, p := range dbProducts {
+		products[i] = &model.Product{
+			ID:          p.ID.Hex(),
+			Name:        p.Name,
+			Description: p.Description,
+			Category:    model.ProductCategory(p.Category),
+			Price:       p.Price,
+			Stock:       p.Stock,
+			ThcContent:  p.THCContent,
+			CbdContent:  p.CBDContent,
+			Strain:      p.Strain,
+			Origin:      p.Origin,
+			ImageURLs:   p.ImageURLs,
+			SellerID:    p.SellerID.Hex(),
+			IsActive:    p.IsActive,
+			CreatedAt:   p.CreatedAt,
+			UpdatedAt:   p.UpdatedAt,
+		}
+	}
+	return products, nil
 }

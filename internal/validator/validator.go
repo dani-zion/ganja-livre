@@ -1,6 +1,3 @@
-//go:build ignore
-// +build ignore
-
 package validator
 
 import (
@@ -11,8 +8,8 @@ import (
 )
 
 var (
-	emailRe   = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
-	zipCodeRe = regexp.MustCompile(`^\d{5}-?\d{3}$`) // Brazilian CEP
+	emailRe = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
+	//zipCodeRe = regexp.MustCompile(`^\d{5}-?\d{3}$`) // Brazilian CEP
 )
 
 // RegisterInput validates user registration fields.
