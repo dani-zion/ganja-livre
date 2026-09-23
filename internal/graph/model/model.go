@@ -69,13 +69,13 @@ func (e UserRole) String() string { return string(e) }
 // ─── Types ────────────────────────────────────
 
 type User struct {
-	ID        string    `json:"id" bson:"_id,omitempty"`
-	Email     string    `json:"email" bson:"email"`
-	Name      string    `json:"name" bson:"name"`
-	Role      UserRole  `json:"role" bson:"role"`
-	Address   *Address  `json:"address,omitempty" bson:"address,omitempty"`
-	CreatedAt time.Time `json:"createdAt" bson:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt" bson:"updatedAt"`
+	ID        string     `json:"id" bson:"_id,omitempty"`
+	Email     string     `json:"email" bson:"email"`
+	Name      string     `json:"name" bson:"name"`
+	Roles     []UserRole `json:"roles" bson:"roles"`
+	Address   *Address   `json:"address,omitempty" bson:"address,omitempty"`
+	CreatedAt time.Time  `json:"createdAt" bson:"createdAt"`
+	UpdatedAt time.Time  `json:"updatedAt" bson:"updatedAt"`
 }
 
 type Address struct {
@@ -157,9 +157,10 @@ type AuthPayload struct {
 // ─── Inputs ───────────────────────────────────
 
 type RegisterInput struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
+	Email    string      `json:"email"`
+	Password string      `json:"password"`
+	Name     string      `json:"name"`
+	Roles    []UserRole  `json:"roles,omitempty"`
 }
 
 type LoginInput struct {

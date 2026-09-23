@@ -53,7 +53,7 @@ func TestRegister_Success(t *testing.T) {
 		assert.NotEmpty(t, payload.RefreshToken)
 		assert.Equal(t, "user@example.com", payload.User.Email)
 		assert.Equal(t, "Test User", payload.User.Name)
-		assert.Equal(t, model.UserRoleCustomer, payload.User.Role)
+		assert.Contains(t, payload.User.Roles, model.UserRoleCustomer)
 		assert.False(t, payload.User.CreatedAt.IsZero())
 	})
 }
@@ -199,7 +199,7 @@ func TestRegister_TokensAreValid(t *testing.T) {
 		accessClaims, err := r.jwtSvc.ValidateAccessToken(payload.AccessToken)
 		require.NoError(t, err)
 		assert.Equal(t, payload.User.Email, accessClaims.Email)
-		assert.Equal(t, model.UserRoleCustomer, accessClaims.Role)
+		assert.Contains(t, accessClaims.Roles, model.UserRoleCustomer)
 
 		refreshClaims, err := r.jwtSvc.ValidateRefreshToken(payload.RefreshToken)
 		require.NoError(t, err)
@@ -219,7 +219,7 @@ func userDoc(email, passwordHash, name, role string) bson.D {
 		{Key: "email", Value: email},
 		{Key: "password_hash", Value: passwordHash},
 		{Key: "name", Value: name},
-		{Key: "role", Value: role},
+		{Key: "roles", Value: []string{role}},
 		{Key: "is_active", Value: true},
 		{Key: "created_at", Value: time.Now().UTC()},
 		{Key: "updated_at", Value: time.Now().UTC()},
@@ -245,7 +245,7 @@ func TestLogin_Success(t *testing.T) {
 		assert.NotEmpty(t, payload.RefreshToken)
 		assert.Equal(t, "login@example.com", payload.User.Email)
 		assert.Equal(t, "Login User", payload.User.Name)
-		assert.Equal(t, model.UserRoleCustomer, payload.User.Role)
+		assert.Contains(t, payload.User.Roles, model.UserRoleCustomer)
 	})
 }
 
@@ -349,7 +349,7 @@ func TestLogin_TokensAreValid(t *testing.T) {
 		accessClaims, err := r.jwtSvc.ValidateAccessToken(payload.AccessToken)
 		require.NoError(t, err)
 		assert.Equal(t, payload.User.Email, accessClaims.Email)
-		assert.Equal(t, model.UserRoleSeller, accessClaims.Role)
+		assert.Contains(t, accessClaims.Roles, model.UserRoleSeller)
 
 		refreshClaims, err := r.jwtSvc.ValidateRefreshToken(payload.RefreshToken)
 		require.NoError(t, err)
@@ -374,13 +374,13 @@ func TestRefreshToken_Success(t *testing.T) {
 			{Key: "email", Value: "refresh@example.com"},
 			{Key: "password_hash", Value: string(hash)},
 			{Key: "name", Value: "Refresh User"},
-			{Key: "role", Value: "CUSTOMER"},
+			{Key: "roles", Value: []string{"CUSTOMER"}},
 			{Key: "is_active", Value: true},
 			{Key: "created_at", Value: time.Now().UTC()},
 			{Key: "updated_at", Value: time.Now().UTC()},
 		}
 
-		tokens, err := r.jwtSvc.IssueTokenPair(uid.Hex(), "refresh@example.com", model.UserRoleCustomer)
+		tokens, err := r.jwtSvc.IssueTokenPair(uid.Hex(), "refresh@example.com", []model.UserRole{model.UserRoleCustomer})
 		require.NoError(t, err)
 
 		mt.AddMockResponses(mtest.CreateCursorResponse(1, "ganja-livre.users", mtest.FirstBatch, doc))
@@ -391,7 +391,7 @@ func TestRefreshToken_Success(t *testing.T) {
 		assert.NotEmpty(t, payload.RefreshToken)
 		assert.Equal(t, "refresh@example.com", payload.User.Email)
 		assert.Equal(t, "Refresh User", payload.User.Name)
-		assert.Equal(t, model.UserRoleCustomer, payload.User.Role)
+		assert.Contains(t, payload.User.Roles, model.UserRoleCustomer)
 
 		newAccessClaims, err := r.jwtSvc.ValidateAccessToken(payload.AccessToken)
 		require.NoError(t, err)
@@ -423,7 +423,7 @@ func TestRefreshToken_ExpiredToken(t *testing.T) {
 			RefreshTokenExpiry: -1 * time.Hour,
 		}
 		svc := auth.NewService(shortLivedCfg)
-		tokens, err := svc.IssueTokenPair(uid.Hex(), "expired@example.com", model.UserRoleCustomer)
+		tokens, err := svc.IssueTokenPair(uid.Hex(), "expired@example.com", []model.UserRole{model.UserRoleCustomer})
 		require.NoError(t, err)
 
 		_, err = doRefreshToken(r, tokens.RefreshToken)
@@ -438,7 +438,7 @@ func TestRefreshToken_UserNotFound(t *testing.T) {
 		r := registerResolver(mt)
 		uid := primitive.NewObjectID()
 
-		tokens, err := r.jwtSvc.IssueTokenPair(uid.Hex(), "ghost@example.com", model.UserRoleCustomer)
+		tokens, err := r.jwtSvc.IssueTokenPair(uid.Hex(), "ghost@example.com", []model.UserRole{model.UserRoleCustomer})
 		require.NoError(t, err)
 
 		mt.AddMockResponses(mtest.CreateCursorResponse(0, "ganja-livre.users", mtest.FirstBatch))
@@ -455,7 +455,7 @@ func TestRefreshToken_UserInactive(t *testing.T) {
 		r := registerResolver(mt)
 		uid := primitive.NewObjectID()
 
-		tokens, err := r.jwtSvc.IssueTokenPair(uid.Hex(), "inactive@example.com", model.UserRoleCustomer)
+		tokens, err := r.jwtSvc.IssueTokenPair(uid.Hex(), "inactive@example.com", []model.UserRole{model.UserRoleCustomer})
 		require.NoError(t, err)
 
 		doc := bson.D{
@@ -463,7 +463,7 @@ func TestRefreshToken_UserInactive(t *testing.T) {
 			{Key: "email", Value: "inactive@example.com"},
 			{Key: "password_hash", Value: "hash"},
 			{Key: "name", Value: "Inactive User"},
-			{Key: "role", Value: "CUSTOMER"},
+			{Key: "roles", Value: []string{"CUSTOMER"}},
 			{Key: "is_active", Value: false},
 			{Key: "created_at", Value: time.Now().UTC()},
 			{Key: "updated_at", Value: time.Now().UTC()},

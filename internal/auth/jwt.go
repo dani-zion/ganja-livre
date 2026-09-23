@@ -23,9 +23,9 @@ type TokenPair struct {
 
 // Claims holds the JWT payload fields exposed to the application.
 type Claims struct {
-	UserID string         `json:"uid"`
-	Email  string         `json:"email"`
-	Role   model.UserRole `json:"role"`
+	UserID string           `json:"uid"`
+	Email  string           `json:"email"`
+	Roles  []model.UserRole `json:"roles"`
 	jwt.RegisteredClaims
 }
 
@@ -39,12 +39,12 @@ func NewService(cfg config.JWTConfig) *Service {
 }
 
 // IssueTokenPair creates a fresh access + refresh token pair.
-func (s *Service) IssueTokenPair(userID, email string, role model.UserRole) (*TokenPair, error) {
-	access, err := s.sign(userID, email, role, s.cfg.AccessTokenExpiry, s.cfg.AccessSecret)
+func (s *Service) IssueTokenPair(userID, email string, roles []model.UserRole) (*TokenPair, error) {
+	access, err := s.sign(userID, email, roles, s.cfg.AccessTokenExpiry, s.cfg.AccessSecret)
 	if err != nil {
 		return nil, err
 	}
-	refresh, err := s.sign(userID, email, role, s.cfg.RefreshTokenExpiry, s.cfg.RefreshSecret)
+	refresh, err := s.sign(userID, email, roles, s.cfg.RefreshTokenExpiry, s.cfg.RefreshSecret)
 	if err != nil {
 		return nil, err
 	}
@@ -74,12 +74,12 @@ func ContextWithClaims(ctx context.Context, claims *Claims) context.Context {
 
 // ─── Private ─────────────────────────────────────────────────────────────────
 
-func (s *Service) sign(userID, email string, role model.UserRole, expiry time.Duration, secret string) (string, error) {
+func (s *Service) sign(userID, email string, roles []model.UserRole, expiry time.Duration, secret string) (string, error) {
 	now := time.Now().UTC()
 	claims := &Claims{
 		UserID: userID,
 		Email:  email,
-		Role:   role,
+		Roles:  roles,
 		RegisteredClaims: jwt.RegisteredClaims{
 			IssuedAt:  jwt.NewNumericDate(now),
 			ExpiresAt: jwt.NewNumericDate(now.Add(expiry)),
@@ -110,6 +110,6 @@ func (s *Service) validate(tokenStr, secret string) (*Claims, error) {
 	return &Claims{
 		UserID: cc.UserID,
 		Email:  cc.Email,
-		Role:   cc.Role,
+		Roles:  cc.Roles,
 	}, nil
 }

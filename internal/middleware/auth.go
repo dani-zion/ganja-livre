@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -24,14 +25,14 @@ func Auth(jwtSvc *auth.Service, log *zap.Logger) func(http.Handler) http.Handler
 
 			parts := strings.SplitN(header, " ", 2)
 			if len(parts) != 2 || !strings.EqualFold(parts[0], "bearer") {
-				http.Error(w, "malformed authorization header", http.StatusUnauthorized)
+				writeGraphQLError(w, http.StatusUnauthorized, "malformed authorization header")
 				return
 			}
 
 			claims, err := jwtSvc.ValidateAccessToken(parts[1])
 			if err != nil {
 				log.Debug("invalid token", zap.Error(err))
-				http.Error(w, "invalid or expired token", http.StatusUnauthorized)
+				writeGraphQLError(w, http.StatusUnauthorized, "invalid or expired token")
 				return
 			}
 
@@ -73,9 +74,11 @@ func RequireRole(ctx context.Context, roles ...model.UserRole) (*auth.Claims, er
 	if err != nil {
 		return nil, err
 	}
-	for _, r := range roles {
-		if claims.Role == r {
-			return claims, nil
+	for _, requiredRole := range roles {
+		for _, userRole := range claims.Roles {
+			if userRole == requiredRole {
+				return claims, nil
+			}
 		}
 	}
 	return nil, ErrForbidden
@@ -100,4 +103,19 @@ func (e *gqlError) Extensions() map[string]interface{} {
 
 func newGQLError(code, msg string) *gqlError {
 	return &gqlError{code: code, message: msg}
+}
+
+func writeGraphQLError(w http.ResponseWriter, status int, message string) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
+		"errors": []map[string]interface{}{
+			{
+				"message": message,
+				"extensions": map[string]string{
+					"code": "UNAUTHENTICATED",
+				},
+			},
+		},
+	})
 }

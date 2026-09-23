@@ -90,7 +90,7 @@ func (r *mutationResolver) UpdateProduct(ctx context.Context, id string, input m
 	}
 
 	filter := bson.M{"_id": oid}
-	if claims.Role == model.UserRoleSeller {
+	if !hasRole(claims.Roles, model.UserRoleAdmin) {
 		sellerID, _ := primitive.ObjectIDFromHex(claims.UserID)
 		filter["seller_id"] = sellerID
 	}
@@ -160,7 +160,7 @@ func (r *mutationResolver) DeleteProduct(ctx context.Context, id string) (bool, 
 	}
 
 	filter := bson.M{"_id": oid}
-	if claims.Role == model.UserRoleSeller {
+	if !hasRole(claims.Roles, model.UserRoleAdmin) {
 		sellerID, _ := primitive.ObjectIDFromHex(claims.UserID)
 		filter["seller_id"] = sellerID
 	}
@@ -197,7 +197,6 @@ func (r *queryResolver) Products(ctx context.Context, filter *model.ProductFilte
 		}
 	}
 
-	// Cursor: use ObjectID as cursor for stable pagination
 	if after != nil && *after != "" {
 		cursorID, err := primitive.ObjectIDFromHex(*after)
 		if err == nil {
@@ -211,7 +210,7 @@ func (r *queryResolver) Products(ctx context.Context, filter *model.ProductFilte
 	}
 
 	findOpts := options.Find().
-		SetLimit(limit + 1). // fetch one extra to determine hasNextPage
+		SetLimit(limit + 1).
 		SetSort(bson.D{{Key: "_id", Value: 1}})
 
 	cursor, err := r.cols.Products.Find(ctx, query, findOpts)
