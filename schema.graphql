@@ -37,7 +37,9 @@ type User {
   id: ID!
   email: String!
   name: String!
-  role: UserRole!
+  roles: [UserRole!]!
+  document: String
+  phone: String
   address: Address
   createdAt: Time!
   updatedAt: Time!
@@ -128,6 +130,7 @@ input RegisterInput {
   email: String!
   password: String!
   name: String!
+  roles: [UserRole!]
 }
 
 input LoginInput {
@@ -219,6 +222,10 @@ type Mutation {
   register(input: RegisterInput!): AuthPayload!
   login(input: LoginInput!): AuthPayload!
   refreshToken(token: String!): AuthPayload!
+
+  # Role management
+  becomeSeller: User!
+  stopSelling: User!
 
   # Products (Seller / Admin)
   createProduct(input: CreateProductInput!): Product!

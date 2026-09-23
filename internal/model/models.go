@@ -45,7 +45,7 @@ type User struct {
 	Email        string             `bson:"email"              json:"email"`
 	PasswordHash string             `bson:"password_hash"      json:"-"`
 	Name         string             `bson:"name"               json:"name"`
-	Role         UserRole           `bson:"role"               json:"role"`
+	Roles        []UserRole         `bson:"roles"              json:"roles"`
 	Address      *Address           `bson:"address,omitempty"  json:"address,omitempty"`
 	IsActive     bool               `bson:"is_active"          json:"is_active"`
 	CreatedAt    time.Time          `bson:"created_at"         json:"created_at"`
@@ -108,7 +108,7 @@ type Order struct {
 // ─── JWT Claims ──────────────────────────────────────────────────────────────
 
 type Claims struct {
-	UserID string   `json:"user_id"`
-	Email  string   `json:"email"`
-	Role   UserRole `json:"role"`
+	UserID string       `json:"user_id"`
+	Email  string       `json:"email"`
+	Roles  []UserRole   `json:"roles"`
 }
