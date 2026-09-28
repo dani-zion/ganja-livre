@@ -49,3 +49,39 @@ func hasRole(roles []model.UserRole, role model.UserRole) bool {
 	}
 	return false
 }
+
+func toGraphUser(u dbmodel.User) *model.User {
+	user := &model.User{
+		ID:        u.ID.Hex(),
+		Email:     u.Email,
+		Name:      u.Name,
+		Roles:     toGraphRoles(u.Roles),
+		CreatedAt: u.CreatedAt,
+		UpdatedAt: u.UpdatedAt,
+	}
+	if u.Address != nil {
+		address := toGraphAddress(*u.Address)
+		user.Address = &address
+	}
+	return user
+}
+
+func toGraphProduct(p dbmodel.Product) *model.Product {
+	return &model.Product{
+		ID:          p.ID.Hex(),
+		Name:        p.Name,
+		Description: p.Description,
+		Category:    model.ProductCategory(p.Category),
+		Price:       p.Price,
+		Stock:       p.Stock,
+		ThcContent:  p.THCContent,
+		CbdContent:  p.CBDContent,
+		Strain:      p.Strain,
+		Origin:      p.Origin,
+		ImageURLs:   p.ImageURLs,
+		SellerID:    p.SellerID.Hex(),
+		IsActive:    p.IsActive,
+		CreatedAt:   p.CreatedAt,
+		UpdatedAt:   p.UpdatedAt,
+	}
+}

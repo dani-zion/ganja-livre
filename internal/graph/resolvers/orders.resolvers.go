@@ -30,7 +30,7 @@ func (r *mutationResolver) PlaceOrder(ctx context.Context, input model.PlaceOrde
 
 	buyerID, _ := primitive.ObjectIDFromHex(claims.UserID)
 
-	var orderItems []*model.OrderItem
+	var orderItems []dbmodel.OrderItem
 	var totalAmount float64
 	var workflowItems []workflows.OrderItemInput
 
@@ -50,8 +50,8 @@ func (r *mutationResolver) PlaceOrder(ctx context.Context, input model.PlaceOrde
 		}
 
 		subtotal := product.Price * float64(item.Quantity)
-		orderItems = append(orderItems, &model.OrderItem{
-			ProductID: pid.Hex(),
+		orderItems = append(orderItems, dbmodel.OrderItem{
+			ProductID: pid,
 			Quantity:  item.Quantity,
 			UnitPrice: product.Price,
 			Subtotal:  subtotal,
@@ -66,32 +66,19 @@ func (r *mutationResolver) PlaceOrder(ctx context.Context, input model.PlaceOrde
 	workflowID := fmt.Sprintf("order-%s", uuid.New().String())
 	now := time.Now().UTC()
 
-	order := &model.Order{
-		ID:                 primitive.NewObjectID().Hex(),
-		BuyerID:            buyerID.Hex(),
+	order := dbmodel.Order{
+		ID:                 primitive.NewObjectID(),
+		BuyerID:            buyerID,
 		Items:              orderItems,
 		TotalAmount:        totalAmount,
-		Status:             model.OrderStatusPending,
-		ShippingAddress:    toAddress(input.ShippingAddress),
+		Status:             dbmodel.StatusPending,
+		ShippingAddress:    toDBAddress(input.ShippingAddress),
 		TemporalWorkflowID: workflowID,
 		CreatedAt:          now,
 		UpdatedAt:          now,
 	}
 
-	orderOID, _ := primitive.ObjectIDFromHex(order.ID)
-	dbOrder := bson.M{
-		"_id":                  orderOID,
-		"buyer_id":             buyerID,
-		"items":                orderItems,
-		"total_amount":         totalAmount,
-		"status":               string(model.OrderStatusPending),
-		"shipping_address":     toAddress(input.ShippingAddress),
-		"temporal_workflow_id": workflowID,
-		"created_at":           now,
-		"updated_at":           now,
-	}
-
-	if _, err = r.cols.Orders.InsertOne(ctx, dbOrder); err != nil {
+	if _, err = r.cols.Orders.InsertOne(ctx, order); err != nil {
 		return nil, errInternal
 	}
 
@@ -102,18 +89,22 @@ func (r *mutationResolver) PlaceOrder(ctx context.Context, input model.PlaceOrde
 		},
 		"OrderWorkflow",
 		workflows.OrderWorkflowInput{
-			OrderID: order.ID,
+			OrderID: order.ID.Hex(),
 			BuyerID: claims.UserID,
 			Amount:  totalAmount,
 			Items:   workflowItems,
 		},
 	)
 	if err != nil {
-		_, _ = r.cols.Orders.DeleteOne(ctx, bson.M{"_id": orderOID})
+		_, _ = r.cols.Orders.DeleteOne(ctx, bson.M{"_id": order.ID})
 		return nil, fmt.Errorf("failed to start order workflow: %w", err)
 	}
 
-	return order, nil
+	orders, err := r.toGraphOrders(ctx, []dbmodel.Order{order})
+	if err != nil {
+		return nil, err
+	}
+	return orders[0], nil
 }
 
 // CancelOrder sends a cancellation signal to the running workflow.
@@ -134,12 +125,12 @@ func (r *mutationResolver) CancelOrder(ctx context.Context, id string) (*model.O
 		filter["buyer_id"] = buyerID
 	}
 
-	var order model.Order
+	var order dbmodel.Order
 	if err = r.cols.Orders.FindOne(ctx, filter).Decode(&order); err != nil {
 		return nil, errNotFound
 	}
 
-	if order.Status != model.OrderStatusPending && order.Status != model.OrderStatusPaymentProcessing {
+	if order.Status != dbmodel.StatusPending && order.Status != dbmodel.StatusPaymentProcessing {
 		return nil, fmt.Errorf("order cannot be cancelled in status: %s", order.Status)
 	}
 
@@ -150,7 +141,7 @@ func (r *mutationResolver) CancelOrder(ctx context.Context, id string) (*model.O
 		return nil, fmt.Errorf("failed to send cancellation signal: %w", err)
 	}
 
-	return &order, nil
+	return r.singleOrder(ctx, order)
 }
 
 // UpdateOrderStatus is an admin operation.
@@ -167,7 +158,7 @@ func (r *mutationResolver) UpdateOrderStatus(ctx context.Context, id string, sta
 	now := time.Now().UTC()
 	after := options.After
 	opts := options.FindOneAndUpdate().SetReturnDocument(after)
-	var updated model.Order
+	var updated dbmodel.Order
 	if err = r.cols.Orders.FindOneAndUpdate(ctx,
 		bson.M{"_id": oid},
 		bson.M{"$set": bson.M{"status": string(status), "updated_at": now}},
@@ -175,7 +166,7 @@ func (r *mutationResolver) UpdateOrderStatus(ctx context.Context, id string, sta
 	).Decode(&updated); err != nil {
 		return nil, errNotFound
 	}
-	return &updated, nil
+	return r.singleOrder(ctx, updated)
 }
 
 // Me returns the currently authenticated user.
@@ -195,14 +186,7 @@ func (r *queryResolver) Me(ctx context.Context) (*model.User, error) {
 		return nil, errNotFound
 	}
 
-	return &model.User{
-		ID:        user.ID.Hex(),
-		Email:     user.Email,
-		Name:      user.Name,
-		Roles:     toGraphRoles(user.Roles),
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-	}, nil
+	return toGraphUser(user), nil
 }
 
 // MyOrders returns orders belonging to the authenticated user.
@@ -219,11 +203,11 @@ func (r *queryResolver) MyOrders(ctx context.Context) ([]*model.Order, error) {
 	}
 	defer cursor.Close(ctx)
 
-	var orders []*model.Order
-	if err = cursor.All(ctx, &orders); err != nil {
+	var dbOrders []dbmodel.Order
+	if err = cursor.All(ctx, &dbOrders); err != nil {
 		return nil, errInternal
 	}
-	return orders, nil
+	return r.toGraphOrders(ctx, dbOrders)
 }
 
 // Order returns a single order by ID.
@@ -244,11 +228,11 @@ func (r *queryResolver) Order(ctx context.Context, id string) (*model.Order, err
 		filter["buyer_id"] = buyerID
 	}
 
-	var order model.Order
-	if err = r.cols.Orders.FindOne(ctx, filter).Decode(&order); err != nil {
+	var dbOrder dbmodel.Order
+	if err = r.cols.Orders.FindOne(ctx, filter).Decode(&dbOrder); err != nil {
 		return nil, errNotFound
 	}
-	return &order, nil
+	return r.singleOrder(ctx, dbOrder)
 }
 
 // AllOrders returns all orders (admin only).
@@ -268,11 +252,11 @@ func (r *queryResolver) AllOrders(ctx context.Context, status *model.OrderStatus
 	}
 	defer cursor.Close(ctx)
 
-	var orders []*model.Order
-	if err = cursor.All(ctx, &orders); err != nil {
+	var dbOrders []dbmodel.Order
+	if err = cursor.All(ctx, &dbOrders); err != nil {
 		return nil, errInternal
 	}
-	return orders, nil
+	return r.toGraphOrders(ctx, dbOrders)
 }
 
 // Document is the resolver for the document field.
@@ -287,8 +271,110 @@ func (r *userResolver) Phone(ctx context.Context, obj *model.User) (*string, err
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-func toAddress(a model.AddressInput) model.Address {
-	addr := model.Address{
+// singleOrder maps one persisted order with its relations resolved.
+func (r *Resolver) singleOrder(ctx context.Context, dbOrder dbmodel.Order) (*model.Order, error) {
+	orders, err := r.toGraphOrders(ctx, []dbmodel.Order{dbOrder})
+	if err != nil {
+		return nil, err
+	}
+	return orders[0], nil
+}
+
+// toGraphOrders maps persisted orders to their GraphQL shape and hydrates the
+// buyer and product relations with one batched query per relation.
+func (r *Resolver) toGraphOrders(ctx context.Context, dbOrders []dbmodel.Order) ([]*model.Order, error) {
+	orders := make([]*model.Order, len(dbOrders))
+	productIDs := make(map[string]primitive.ObjectID)
+	buyerIDs := make(map[string]primitive.ObjectID)
+
+	for i, dbOrder := range dbOrders {
+		orders[i] = toGraphOrder(dbOrder)
+		if !dbOrder.BuyerID.IsZero() {
+			buyerIDs[dbOrder.BuyerID.Hex()] = dbOrder.BuyerID
+		}
+		for _, item := range dbOrder.Items {
+			if !item.ProductID.IsZero() {
+				productIDs[item.ProductID.Hex()] = item.ProductID
+			}
+		}
+	}
+
+	products, err := r.loadProducts(ctx, productIDs)
+	if err != nil {
+		return nil, err
+	}
+	buyers, err := r.loadUsers(ctx, buyerIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, order := range orders {
+		order.Buyer = buyers[order.BuyerID]
+		for _, item := range order.Items {
+			item.Product = products[item.ProductID]
+		}
+	}
+	return orders, nil
+}
+
+// loadProducts fetches products by ID, keyed by hex ID.
+func (r *Resolver) loadProducts(ctx context.Context, ids map[string]primitive.ObjectID) (map[string]*model.Product, error) {
+	products := make(map[string]*model.Product, len(ids))
+	if len(ids) == 0 {
+		return products, nil
+	}
+
+	cursor, err := r.cols.Products.Find(ctx, bson.M{"_id": bson.M{"$in": objectIDs(ids)}})
+	if err != nil {
+		return nil, errInternal
+	}
+	defer cursor.Close(ctx)
+
+	var dbProducts []dbmodel.Product
+	if err = cursor.All(ctx, &dbProducts); err != nil {
+		return nil, errInternal
+	}
+	for i := range dbProducts {
+		product := toGraphProduct(dbProducts[i])
+		products[product.ID] = product
+	}
+	return products, nil
+}
+
+// loadUsers fetches users by ID, keyed by hex ID.
+func (r *Resolver) loadUsers(ctx context.Context, ids map[string]primitive.ObjectID) (map[string]*model.User, error) {
+	users := make(map[string]*model.User, len(ids))
+	if len(ids) == 0 {
+		return users, nil
+	}
+
+	cursor, err := r.cols.Users.Find(ctx, bson.M{"_id": bson.M{"$in": objectIDs(ids)}})
+	if err != nil {
+		return nil, errInternal
+	}
+	defer cursor.Close(ctx)
+
+	var dbUsers []dbmodel.User
+	if err = cursor.All(ctx, &dbUsers); err != nil {
+		return nil, errInternal
+	}
+	for i := range dbUsers {
+		user := toGraphUser(dbUsers[i])
+		users[user.ID] = user
+	}
+	return users, nil
+}
+
+func objectIDs(ids map[string]primitive.ObjectID) []primitive.ObjectID {
+	oids := make([]primitive.ObjectID, 0, len(ids))
+	for _, id := range ids {
+		oids = append(oids, id)
+	}
+	return oids
+}
+
+func toDBAddress(a model.AddressInput) dbmodel.Address {
+	addr := dbmodel.Address{
 		Street:       a.Street,
 		Number:       a.Number,
 		Neighborhood: a.Neighborhood,
@@ -298,8 +384,51 @@ func toAddress(a model.AddressInput) model.Address {
 		Country:      a.Country,
 	}
 	if a.Complement != nil {
-		c := *a.Complement
-		addr.Complement = &c
+		addr.Complement = *a.Complement
 	}
 	return addr
+}
+
+func toGraphAddress(a dbmodel.Address) model.Address {
+	addr := model.Address{
+		Street:       a.Street,
+		Number:       a.Number,
+		Neighborhood: a.Neighborhood,
+		City:         a.City,
+		State:        a.State,
+		ZipCode:      a.ZipCode,
+		Country:      a.Country,
+	}
+	if a.Complement != "" {
+		complement := a.Complement
+		addr.Complement = &complement
+	}
+	return addr
+}
+
+// toGraphOrder maps a persisted order without its relations; use
+// toGraphOrders to also resolve buyer and product.
+func toGraphOrder(dbOrder dbmodel.Order) *model.Order {
+	items := make([]*model.OrderItem, len(dbOrder.Items))
+	for i, item := range dbOrder.Items {
+		items[i] = &model.OrderItem{
+			ProductID: item.ProductID.Hex(),
+			Quantity:  item.Quantity,
+			UnitPrice: item.UnitPrice,
+			Subtotal:  item.Subtotal,
+		}
+	}
+
+	return &model.Order{
+		ID:                 dbOrder.ID.Hex(),
+		BuyerID:            dbOrder.BuyerID.Hex(),
+		Items:              items,
+		TotalAmount:        dbOrder.TotalAmount,
+		Status:             model.OrderStatus(dbOrder.Status),
+		ShippingAddress:    toGraphAddress(dbOrder.ShippingAddress),
+		TemporalWorkflowID: dbOrder.TemporalWorkflowID,
+		PaymentIntentID:    dbOrder.PaymentIntentID,
+		CreatedAt:          dbOrder.CreatedAt,
+		UpdatedAt:          dbOrder.UpdatedAt,
+	}
 }
