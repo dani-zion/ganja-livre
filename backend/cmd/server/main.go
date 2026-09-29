@@ -31,6 +31,10 @@ import (
 )
 
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "-healthcheck" {
+		os.Exit(runHealthcheck())
+	}
+
 	// Load .env only in non-production environments
 	if os.Getenv("APP_ENV") != "production" {
 		_ = godotenv.Load()
@@ -90,6 +94,7 @@ func main() {
 	r.Use(chimw.ClientIPFromXFFTrustedProxies(1))
 	r.Use(chimw.Recoverer)
 	r.Use(chimw.Timeout(cfg.Server.ReadTimeout))
+	r.Use(appmw.CORS(cfg.Server.AllowedOrigins))
 	r.Use(appmw.SecurityHeaders())
 	r.Use(appmw.Auth(jwtSvc, log))
 
@@ -144,6 +149,23 @@ func main() {
 	}
 
 	log.Info("server stopped")
+}
+
+func runHealthcheck() int {
+	port := os.Getenv("SERVER_PORT")
+	if port == "" {
+		port = "8080"
+	}
+	client := &http.Client{Timeout: 2 * time.Second}
+	resp, err := client.Get("http://127.0.0.1:" + port + "/health")
+	if err != nil {
+		return 1
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return 1
+	}
+	return 0
 }
 
 func buildLogger(env string) *zap.Logger {

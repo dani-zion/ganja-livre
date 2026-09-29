@@ -1,7 +1,12 @@
-.PHONY: help dev down build generate lint test sec clean
+.PHONY: help dev down down-volumes generate generate-api generate-web \
+        backend-build backend-lint backend-test backend-sec backend-tidy \
+        frontend-install frontend-dev frontend-build frontend-lint clean gen-secrets
 
-BINARY_API    = dist/server
-BINARY_WORKER = dist/worker
+BACKEND  = backend
+FRONTEND = frontend
+
+BINARY_API    = $(BACKEND)/dist/server
+BINARY_WORKER = $(BACKEND)/dist/worker
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -9,7 +14,7 @@ help: ## Show this help
 
 # ── Local development ─────────────────────────────────────────────────────────
 
-dev: ## Start full stack with Docker Compose (hot-reload via air)
+dev: ## Start full stack with Docker Compose (hot-reload)
 	@cp -n .env.example .env 2>/dev/null || true
 	docker compose up --build
 
@@ -21,35 +26,53 @@ down-volumes: ## Stop containers AND delete all data volumes
 
 # ── Code generation ───────────────────────────────────────────────────────────
 
-generate: ## Run gqlgen to regenerate GraphQL boilerplate
-	go tool gqlgen generate
+generate: generate-api generate-web ## Regenerate both GraphQL server and web client
+	@echo "Generated API and web code"
 
-# ── Build ─────────────────────────────────────────────────────────────────────
+generate-api: ## Run gqlgen to regenerate GraphQL server code
+	cd $(BACKEND) && go tool gqlgen generate
 
-build: ## Compile both binaries to ./dist
-	@mkdir -p dist
-	CGO_ENABLED=0 go build -ldflags="-w -s" -o $(BINARY_API)    ./cmd/server
-	CGO_ENABLED=0 go build -ldflags="-w -s" -o $(BINARY_WORKER) ./cmd/worker
+generate-web: ## Run GraphQL codegen to regenerate the typed web client
+	cd $(FRONTEND) && npm run generate
+
+# ── Backend ───────────────────────────────────────────────────────────────────
+
+backend-build: ## Compile both binaries to backend/dist
+	@mkdir -p $(BACKEND)/dist
+	cd $(BACKEND) && CGO_ENABLED=0 go build -ldflags="-w -s" -o dist/server ./cmd/server
+	cd $(BACKEND) && CGO_ENABLED=0 go build -ldflags="-w -s" -o dist/worker ./cmd/worker
 	@echo "Built: $(BINARY_API)  $(BINARY_WORKER)"
 
-# ── Quality ───────────────────────────────────────────────────────────────────
+backend-lint: ## Run golangci-lint
+	cd $(BACKEND) && golangci-lint run ./...
 
-lint: ## Run golangci-lint
-	golangci-lint run ./...
+backend-test: ## Run backend tests with race detector
+	cd $(BACKEND) && go test -race -cover ./...
 
-test: ## Run all tests with race detector
-	go test -race -cover ./...
+backend-sec: ## Run gosec security scanner
+	cd $(BACKEND) && gosec -quiet ./...
 
-sec: ## Run gosec security scanner
-	gosec -quiet ./...
+backend-tidy: ## Tidy backend go.mod/go.sum
+	cd $(BACKEND) && go mod tidy
+
+# ── Frontend ──────────────────────────────────────────────────────────────────
+
+frontend-install: ## Install frontend dependencies
+	cd $(FRONTEND) && npm install
+
+frontend-dev: ## Start Vite dev server (hot-reload)
+	cd $(FRONTEND) && npm run dev
+
+frontend-build: ## Type-check and build frontend for production
+	cd $(FRONTEND) && npm run build
+
+frontend-lint: ## Run ESLint on the frontend
+	cd $(FRONTEND) && npm run lint
 
 # ── Utilities ─────────────────────────────────────────────────────────────────
 
-tidy: ## Tidy go.sum
-	go mod tidy
-
 clean: ## Remove build artifacts
-	rm -rf dist/
+	rm -rf $(BACKEND)/dist/ $(FRONTEND)/dist/
 
 gen-secrets: ## Print random JWT secrets to copy into .env
 	@echo "JWT_ACCESS_SECRET=$$(openssl rand -hex 64)"

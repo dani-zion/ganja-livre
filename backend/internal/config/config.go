@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -27,6 +28,7 @@ type ServerConfig struct {
 	ReadTimeout     time.Duration
 	WriteTimeout    time.Duration
 	ShutdownTimeout time.Duration
+	AllowedOrigins  []string // CORS allow-list
 }
 
 type MongoConfig struct {
@@ -61,6 +63,7 @@ func Load() (*Config, error) {
 			ReadTimeout:     getEnvDuration("SERVER_READ_TIMEOUT", 15*time.Second),
 			WriteTimeout:    getEnvDuration("SERVER_WRITE_TIMEOUT", 15*time.Second),
 			ShutdownTimeout: getEnvDuration("SERVER_SHUTDOWN_TIMEOUT", 30*time.Second),
+			AllowedOrigins:  getEnvCSV("CORS_ALLOWED_ORIGINS", "http://localhost:5173"),
 		},
 		MongoDB: MongoConfig{
 			URI:            mustGetEnv("MONGODB_URI"),
@@ -135,4 +138,16 @@ func getEnvUint64(key string, fallback uint64) uint64 {
 		return fallback
 	}
 	return n
+}
+
+func getEnvCSV(key, fallback string) []string {
+	raw := getEnv(key, fallback)
+	parts := strings.Split(raw, ",")
+	out := make([]string, 0, len(parts))
+	for _, p := range parts {
+		if p = strings.TrimSpace(p); p != "" {
+			out = append(out, p)
+		}
+	}
+	return out
 }
