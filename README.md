@@ -1,7 +1,9 @@
-# 🌿 Ganja Livre API
+# 🌿 Ganja Livre
 
-A secure, scalable GraphQL API for cannabis retail — built in Go.  
+A secure, scalable GraphQL API for cannabis retail — built in Go — plus its React web frontend.
 Architecture mirrors the reliability of large marketplace platforms, with Temporal.io handling all order lifecycle orchestration.
+
+Monorepo layout: `backend/` (Go API + Temporal worker) and `frontend/` (Vite + React + TypeScript), sharing the GraphQL schema as the API contract.
 
 ---
 
@@ -93,33 +95,41 @@ PlaceOrder ──► [PENDING]
 
 ```
 ganja-livre/
-├── cmd/
-│   ├── server/          # HTTP + GraphQL entrypoint
-│   └── worker/          # Temporal worker entrypoint
-├── internal/
-│   ├── auth/            # JWT issuance & validation
-│   ├── config/          # Env-based config loader
-│   ├── graph/
-│   │   ├── model/       # Domain models (User, Product, Order)
-│   │   ├── generated/   # gqlgen output (git-ignored in prod)
-│   │   └── resolvers/   # GraphQL resolvers (auth, products, orders)
-│   ├── middleware/       # JWT auth, security headers, rate limiter, logger
-│   ├── mongodb/         # Client, indexes, collection helpers
-│   ├── temporal/
-│   │   ├── workflows/   # OrderWorkflow
-│   │   └── activities/  # ReserveStock, UpdateStatus, Ship, etc.
-│   └── validator/       # Input validation (email, password, price…)
-├── graph/
-│   └── schema.graphql   # Single source of truth for the API contract
+├── backend/                 # Go API + Temporal worker
+│   ├── cmd/
+│   │   ├── server/          # HTTP + GraphQL entrypoint
+│   │   └── worker/          # Temporal worker entrypoint
+│   ├── internal/
+│   │   ├── auth/            # JWT issuance & validation
+│   │   ├── config/          # Env-based config loader (incl. CORS allow-list)
+│   │   ├── graph/
+│   │   │   ├── model/       # Domain models (User, Product, Order)
+│   │   │   ├── generated/   # gqlgen output
+│   │   │   └── resolvers/   # GraphQL resolvers (schema.resolvers.go)
+│   │   ├── middleware/      # JWT auth, CORS, security headers
+│   │   ├── mongodb/         # Client, indexes, collection helpers
+│   │   ├── temporal/
+│   │   │   └── workflows/   # OrderWorkflow
+│   │   └── validator/       # Input validation (email, password, price…)
+│   ├── schema.graphql       # Single source of truth for the API contract
+│   ├── gqlgen.yml           # Server code generation config
+│   ├── go.mod  go.sum
+│   └── Dockerfile           # Multi-stage: builder → scratch images
+├── frontend/                # Vite + React + TypeScript web app
+│   ├── src/
+│   │   ├── graphql/         # Documents + codegen output (generated/)
+│   │   ├── lib/             # GraphQL client (graphql-request)
+│   │   └── features/        # Feature modules (grows over time)
+│   ├── codegen.ts           # Typed client generation from ../backend/schema.graphql
+│   ├── vite.config.ts       # Dev server + /query proxy → API
+│   ├── Dockerfile           # dev / build / prod (nginx) stages
+│   └── nginx.conf           # Static serving + /query reverse proxy
 ├── scripts/
-│   └── mongo-init.js    # DB user + collection validation rules
-├── docker/
-│   └── temporal-dynamic-config.yaml
-├── Dockerfile           # Multi-stage: builder → scratch images
-├── docker-compose.yml   # Full local stack
-├── gqlgen.yml           # Code generation config
-├── Makefile             # Developer workflow
-└── .env.example         # Config template
+│   └── mongo-init.js        # DB user + collection validation rules
+├── config/                  # Temporal dynamic config
+├── docker-compose.yml       # Full local stack (API, worker, web, infra)
+├── Makefile                 # Developer workflow (namespaced targets)
+└── .env.example             # Config template
 ```
 
 ---
@@ -128,7 +138,8 @@ ganja-livre/
 
 ### Prerequisites
 - Docker & Docker Compose v2
-- Go 1.22+ (for local development)
+- Go 1.25+ (for local backend development)
+- Node 20+ & npm (for local frontend development)
 - `make`
 
 ### 1. Configure secrets
@@ -150,16 +161,33 @@ make dev
 Services:
 | Service | URL |
 |---|---|
+| Web App | http://localhost:5173 |
 | GraphQL API | http://localhost:8080/query |
 | GraphQL Playground | http://localhost:8080/playground |
 | Temporal UI | http://localhost:8088 |
 | MongoDB | mongodb://localhost:27017 |
 
-### 3. Generate GraphQL code
+The web app runs Vite with hot-reload; its dev server proxies `/query` to the API
+(no CORS needed during development). The API also accepts direct cross-origin
+requests from origins listed in `CORS_ALLOWED_ORIGINS`.
+
+### 3. Frontend setup (local, outside Docker)
 
 ```bash
-make generate
+make frontend-install   # npm install
+make frontend-dev       # Vite dev server (runs codegen first)
 ```
+
+### 4. Generate GraphQL code
+
+```bash
+make generate       # both sides
+make generate-api   # gqlgen → backend server code
+make generate-web   # GraphQL codegen → typed frontend client
+```
+
+The frontend client is generated from `backend/schema.graphql` directly, so
+schema changes are caught at compile time in both projects.
 
 ---
 
@@ -253,9 +281,11 @@ mutation {
 ## Running Tests
 
 ```bash
-make test        # all tests with race detector
-make lint        # golangci-lint
-make sec         # gosec security scanner
+make backend-test    # all backend tests with race detector
+make backend-lint    # golangci-lint
+make backend-sec     # gosec security scanner
+make frontend-lint   # ESLint
+make frontend-build  # type-check + production build
 ```
 
 ---

@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/graphql/documents.ts","./src/graphql/generated/fragment-masking.ts","./src/graphql/generated/gql.ts","./src/graphql/generated/graphql.ts","./src/graphql/generated/index.ts","./src/lib/api.ts"],"version":"6.0.3"}

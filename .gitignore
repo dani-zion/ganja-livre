@@ -12,6 +12,10 @@ dist/
 *.out
 vendor/
 
+# ── Frontend ─────────────────────────────────────────────────────────────────
+node_modules/
+frontend/src/graphql/generated/
+
 # ── IDE / Editor ─────────────────────────────────────────────────────────────
 .vscode/
 .idea/
